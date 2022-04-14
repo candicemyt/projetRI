@@ -52,17 +52,18 @@ def load_data(type, n):
 
 
 
+if __name__ == '__main__':
 
-#%%
-xt, yt, l = load_data("train",127)
-print(len(l))
+    #%%
+    xt, yt, l = load_data("train",127)
+    print(len(l))
 
 
-#%%
-l = dict(sorted(l.items(), key=lambda item: item[1]))
-s = sum(list(l.values()))
-v = [v/s for v in list(l.values())]
-plt.bar(l.keys(), v)
-plt.xticks(list(l.keys()), rotation=90, size=8)
-print(l)
-#%%
+    #%%
+    l = dict(sorted(l.items(), key=lambda item: item[1]))
+    s = sum(list(l.values()))
+    v = [v/s for v in list(l.values())]
+    plt.bar(l.keys(), v)
+    plt.xticks(list(l.keys()), rotation=90, size=8)
+    print(l)
+    #%%
