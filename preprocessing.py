@@ -7,7 +7,7 @@ from nltk.corpus import stopwords
 
 sw=set(stopwords.words('english'))
 
-def preprocessing(text, low, punc, up_word, number, stem, stw, m):
+def preprocessing(text, low, punc, up_word, number, stem, stw, m='°'):
     # suppression des accents et des caractères non normalisés
     text = unicodedata.normalize('NFD', text).encode('ascii', 'ignore').decode("utf-8")
 
@@ -32,7 +32,7 @@ def preprocessing(text, low, punc, up_word, number, stem, stw, m):
 
     # on enlève les stop words
     if stw:
-        text = ' '.join([word for word in text.split() if word not in sw ])
+        text = ' '.join([word for word in text.split() if word not in sw])
 
     # stemming
     if stem:
