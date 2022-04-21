@@ -5,6 +5,9 @@ import numpy as np
 #%%
 
 def concat_int(intents):
+    """
+    Fonction utilitaire permettant de gérer les clés des dictionaires d'intents
+    """
     res = ''
     for i in intents:
         res += i + '+'
@@ -14,8 +17,9 @@ def concat_int(intents):
 
 def load_data(type, n):
     """
+    Charge les données
     :param type: type des data
-    :param n: nombres de fichiers de data
+    :param n: nombre de fichiers de data
     :return: utterances -> liste de dialogue, un dialogue est une liste de phrases
             intents -> liste de liste de labels : (speaker, intent) un intent est une liste d'intent
             label_combinations -> dictionnaire d'occurences des intents
@@ -54,7 +58,11 @@ def load_data(type, n):
 
 #%%
 def label_preprocessing_greetings(intents):
-
+    """
+    Supprime les intent de greetings quand ils sont accompagnés d'autres intents
+    :param intents: liste de liste de labels
+    :return: liste des intents modifiée
+    """
     for d_int in intents:
         for speaker, intent in d_int:
             if len(intent)>=2:
@@ -73,6 +81,12 @@ def label_preprocessing_greetings(intents):
 
 #%%
 def label_preprocessing_combinations(intents, intents_to_keep):
+    """
+
+    :param intents:
+    :param intents_to_keep:
+    :return:
+    """
     res = []
     for d in intents:
         intent_mod = []
