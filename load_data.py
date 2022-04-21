@@ -82,10 +82,10 @@ def label_preprocessing_greetings(intents):
 #%%
 def label_preprocessing_combinations(intents, intents_to_keep):
     """
-
-    :param intents:
-    :param intents_to_keep:
-    :return:
+    Garde un seul intent aléatoirement dans les combinaisons d'intents trop peu fréquents
+    :param intents: liste de listes d'intents
+    :param intents_to_keep: liste des intents les plus fréquents
+    :return: la liste de listes d'intents modifiée
     """
     res = []
     for d in intents:
@@ -101,6 +101,9 @@ def label_preprocessing_combinations(intents, intents_to_keep):
 
 #%%
 def label_dict_occ(labels):
+    """
+    Crée le dictionnaire d'occurences des labels
+    """
     labels_dict = dict()
     for d in labels:
         for speaker, label in d:
@@ -158,4 +161,7 @@ if __name__ == '__main__':
     v = [v/s for v in list(dico_labels.values())]
     plt.bar(dico_labels.keys(), v)
     plt.xticks(list(dico_labels.keys()), rotation=90, size=8)
+    print(len(dico_labels))
 #%%
+
+
