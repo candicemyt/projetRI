@@ -1,4 +1,3 @@
-#%%
 import numpy as np
 import pandas as pd
 
@@ -8,7 +7,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-#%%
 def content_feature(utterances):
     #tf-idf representation
     vectorizer = TfidfVectorizer()
@@ -26,7 +24,6 @@ def content_feature(utterances):
     wh = [[1 if s.find('how') != -1 else 0,1 if s.find('what') != -1 else 0,1 if s.find('why') != -1 else 0,1 if s.find('who') != -1 else 0,1 if s.find('where') != -1 else 0,1 if s.find('when') != -1 else 0] for s in utterances]
     return pd.DataFrame(list(zip(cos_initial_utterance,cos_entire_dialogue,question,same,wh)), columns = ['cos_initial_utterance', 'cos_entire_dialogue','question_mark','same/similar','how/what/why/who/where/when'])
 
-#%%
 def structural_feature(utterances):
     #Absolute position of an utterance in the dialog
     pos=[i for i in range(len(utterances))]
@@ -43,7 +40,6 @@ def structural_feature(utterances):
     return pd.DataFrame(list(zip(pos,nor_pos,num_w,sw,sw_stem)), columns = ['position','normalized_position','nb_word_sw','unique_nb_word_sw','unique_nb_word_sw_stem'])
 
 
-#%%
 def sentiment_feature(utterances):
     #Does the utterance contain the keyword thank
     thank=[1 if s.find('thank') != -1 else 0 for s in utterances]
@@ -56,7 +52,6 @@ def sentiment_feature(utterances):
     sent=[list(map(str, [sid.polarity_scores(s)['neg'], sid.polarity_scores(s)['neu'], sid.polarity_scores(s)['pos']])) for s in utterances]
     return pd.DataFrame(list(zip(thank,exc,neg,sent)), columns = ['thank','exclamation','did_not/does_not','pos/neu/neg'])
 
-#%%
 
 def feature_analysis(dialogs):
     features=[]
@@ -69,14 +64,11 @@ def feature_analysis(dialogs):
         features.append(feature)
     return features
 
-#%%
-xt, yt, l = load_data("train",127)
+if __name__ == '__main__':
 
-#%%
-xt_preprocess=[[preprocessing(text) for text in dialogue]for dialogue in xt]
-
-#%%
-features=feature_analysis(xt_preprocess)
-diag=features[0]
-feature=feature_analysis(diag)
-print(feature.head())
+    xt, yt, l = load_data("train",127)
+    xt_preprocess=[[preprocessing(text) for text in dialogue]for dialogue in xt]
+    features=feature_analysis(xt_preprocess)
+    diag=features[0]
+    feature=feature_analysis(diag)
+    print(feature.head())
