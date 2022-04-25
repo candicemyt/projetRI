@@ -1,7 +1,6 @@
 import json
 import numpy as np
 
-
 def concat_int(intents):
     """
     Fonction utilitaire permettant de gérer les clés des dictionaires d'intents
@@ -10,8 +9,6 @@ def concat_int(intents):
     for i in intents:
         res += i + '+'
     return res
-
-
 
 def load_data(type, n):
     """
@@ -92,6 +89,8 @@ def label_preprocessing_combinations(intents, intents_to_keep):
             if concat_int(intent) not in intents_to_keep:
                 alea = np.random.randint(0, len(intent))
                 intent = intent[alea]
+                intent_mod.append((speaker, [intent]))
+            else:
                 intent_mod.append((speaker, intent))
         res.append(intent_mod)
     return res

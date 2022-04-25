@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ab2caa0-35cb-42e8-98af-cb22760d52ee" name="Changes" comment="début ml">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NaiveBayes.py" beforeDir="false" afterPath="$PROJECT_DIR$/NaiveBayes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/feature_analysis.py" afterDir="false" />
+    <list default="true" id="5ab2caa0-35cb-42e8-98af-cb22760d52ee" name="Changes" comment="suite ml">
+      <change beforePath="$PROJECT_DIR$/load_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/load_data.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +70,7 @@
       <workItem from="1650551712792" duration="636000" />
       <workItem from="1650555366587" duration="2896000" />
       <workItem from="1650818173610" duration="7262000" />
+      <workItem from="1650889236968" duration="48000" />
     </task>
     <task id="LOCAL-00001" summary="début ml">
       <created>1650558927469</created>
@@ -80,7 +79,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650558927470</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="suite ml">
+      <created>1650889262036</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1650889262036</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -99,6 +105,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="début ml" />
-    <option name="LAST_COMMIT_MESSAGE" value="début ml" />
+    <MESSAGE value="suite ml" />
+    <option name="LAST_COMMIT_MESSAGE" value="suite ml" />
   </component>
 </project>
