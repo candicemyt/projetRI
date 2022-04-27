@@ -5,13 +5,15 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.naive_bayes import MultinomialNB
 from skmultilearn.problem_transform import BinaryRelevance
 from load_data import load_data, label_preprocessing_greetings, label_preprocessing_combinations
-
+from preprocessing import preprocessing, stop_words_removal, stemming
 #%%
 
-#TO DO : essayer avec GaussianNB()
 
-##data
-from preprocessing import preprocessing, stop_words_removal, stemming
+
+
+# todo : il faut donner en datax aux modèles les features générées et pas les phrases voir ce qu'il faut donner pour
+#  les datay (est ce que binary relevance suffit)
+
 
 X_train, labels_train, dico_labels = load_data("train",127)
 X_val, labels_val, dico_labels_val = load_data("val",20)
@@ -33,33 +35,36 @@ labels_preprocessed_test = label_preprocessing_greetings(labels_test)
 Y_test = label_preprocessing_combinations(labels_preprocessed_test, intents_to_keep)
 
 #%%
-##we use train set to fit the model
-clf=BinaryRelevance(MultinomialNB())
+# todo: essayer avec GaussianNB()
+clf = BinaryRelevance(MultinomialNB())
 
 #%%
 print(len(X_train))
 print(len(Y_train))
 print(len(X_train[0]))
 print(len(Y_train[0]))
-print(X_train[0][0])
-print(Y_train[0])
+print('x', X_train[0][0])
+print('y', Y_train[0])
 #%%
+##we use train set to fit the model
 clf.fit(X_train, Y_train)
 
 #%%
 ##we use validation set to fine-tune the model hyperparameters with CalibratedClassifierCV
 #CalibratedClassifierCV : estimate the parameters of a classifier and calibrate the classifier
 #we use binaryRelevance()
-cal_clf=CalibratedClassifierCV(base_estimator=clf, cv="prefit")
-print(cal_clf.get_params())
-binary_rel_clf=BinaryRelevance(cal_clf)
-binary_rel_clf.fit(X_val,Y_val)
+# cal_clf = CalibratedClassifierCV(base_estimator=clf, cv="prefit")
+# print(cal_clf.get_params())
+# binary_rel_clf = BinaryRelevance(cal_clf)
+# binary_rel_clf.fit(X_val,Y_val)
 
 #%%
 ##we use Test Dataset to evaluate the model
-pred = binary_rel_clf.predict(X_test)
+pred = clf.predict(X_test)
 acc=accuracy_score(Y_test,pred)
 pre=precision_score(Y_test,pred)
 rec=recall_score(Y_test,pred)
 f1=f1_score(Y_test,pred)
 df=pd.DataFrame(['NaiveBayes',acc,pre,rec,f1],columns=['methods', 'acc', 'precision','recall','f1'])
+
+#%%
