@@ -12,7 +12,7 @@ from preprocessing import preprocessing, stop_words_removal, stemming
 #%%
 
 # todo : il faut donner en datax aux modèles les features générées et pas les phrases voir ce qu'il faut donner pour
-#  les datay (est ce que binary relevance suffit)
+#  les datay (est ce que binary relevance suffit?)
 
 
 X_train, labels_train, dico_labels = load_data("train",127)
