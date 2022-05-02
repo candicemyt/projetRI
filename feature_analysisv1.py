@@ -5,7 +5,7 @@ from preprocessing import *
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-
+from tqdm.auto import tqdm
 
 # %%
 def content_feature(utterances):
@@ -23,10 +23,10 @@ def content_feature(utterances):
     # Does the utterance contain the keywords same, similar
     same = [1 if s.find('same') != -1 or s.find('similar') != -1 else 0 for s in utterances]
     # Does the utterance contain the keywords what, where, when, why, who, how
-    wh = [[1 if s.find('how') != -1 else 0, 1 if s.find('what') != -1 else 0, 1 if s.find('why') != -1 else 0,
+    wh = np.array([[1 if s.find('how') != -1 else 0, 1 if s.find('what') != -1 else 0, 1 if s.find('why') != -1 else 0,
            1 if s.find('who') != -1 else 0, 1 if s.find('where') != -1 else 0, 1 if s.find('when') != -1 else 0] for s
-          in utterances]
-    return list(zip(cos_initial_utterance, cos_entire_dialogue, question, same, wh))
+          in utterances])
+    return list(zip(np.round(cos_initial_utterance,decimals=3), np.round(cos_entire_dialogue,decimals=3),question, same))
 
 
 # %%
@@ -58,32 +58,27 @@ def sentiment_feature(utterances):
     neg = [1 if s.find('did not') != -1 or s.find('does not') != -1 else 0 for s in utterances]
     # Sentiment scores of the utterance computed by VADER (positive, neutral, and negative)
     sid = SentimentIntensityAnalyzer()
-    sent = [
-        list(map(str, [sid.polarity_scores(s)['neg'], sid.polarity_scores(s)['neu'], sid.polarity_scores(s)['pos']]))
-        for s in utterances]
-    return list(zip(thank, exc, neg, sent))
+    posi = [sid.polarity_scores(s)['pos'] for s in utterances]
+    nega = [sid.polarity_scores(s)['neg'] for s in utterances]
+    neut = [sid.polarity_scores(s)['neu'] for s in utterances]
+    return list(zip(thank, exc, neg, posi, nega, neut))
 
 
 # %%
 def feature_analysis(dialogs):
     features = []
-    #i = 0
-    for diag in dialogs:
-        #print(i, "/", len(dialogs))
-        #i += 1
+    value=["cos_initial_utterance","cos_entire_dialogue","question","same","pos", "nor_pos", "num_w", "sw", "sw_stem", "is_starter","thank", "exc", "neg","positif","negatif","neutre"]
+    for diag in tqdm(dialogs):
         content = [list(i) for i in content_feature(diag)]
         structural = [list(i) for i in structural_feature(diag)]
         sentiment = [list(i) for i in sentiment_feature(diag)]
-        feature = [list(i) for i in list(zip(content, structural, sentiment))]
-        features.append(feature)
+        #feature = [list(i) for c,st,se in list(zip(content, structural, sentiment))]
+        #features.append(np.array(feature,dtype=object))
+        l=np.concatenate((content,structural,sentiment),axis=1).tolist()
+        features.append([dict(zip(value,u)) for u in l])
     return features
 
-
-# if __name__ == '__main__':
-# %%
-xt, yt, l = load_data("train", 127)
-# %%
-xt_preprocess = [[preprocessing(text) for text in dialogue] for dialogue in xt]
-# %%
-features = feature_analysis(xt_preprocess[:10])
-diag = pd.DataFrame(features[0])
+if __name__ == '__main__':
+    xt, yt, l = load_data("train", 127)
+    xt_preprocess = [[preprocessing(text) for text in dialogue] for dialogue in xt]
+    features = feature_analysis(xt_preprocess[:10])

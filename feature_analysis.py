@@ -5,7 +5,7 @@ from preprocessing import *
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-
+from tqdm.auto import tqdm
 
 def content_feature(utterances):
     #tf-idf representation
@@ -43,7 +43,7 @@ def content_feature(utterances):
             wh.append(0)
 
     cos_initial_utterance = np.array(cos_initial_utterance).reshape(len(utterances))
-    return list(zip(cos_initial_utterance, np.array(cos_entire_dialogue), question, same, wh))
+    return list(zip(np.round(cos_initial_utterance,decimals=3), np.round(cos_entire_dialogue,decimals=3), question, same, wh))
 
 
 def structural_feature(utterances):
@@ -76,7 +76,9 @@ def sentiment_feature(utterances):
     thank = []
     exc = []
     neg = []
-    sent = []
+    posi = []
+    nega = []
+    neut = []
     sid = SentimentIntensityAnalyzer()
 
     for i in range(len(utterances)):
@@ -95,33 +97,30 @@ def sentiment_feature(utterances):
             neg.append(1)
         else:
             neg.append(0)
+        posi.append(sid.polarity_scores(utterances[i])['pos'])
+        nega.append(sid.polarity_scores(utterances[i])['neg'])
+        neut.append(sid.polarity_scores(utterances[i])['neu'])
 
-        sent.append(list(map(str, [sid.polarity_scores(utterances[i])['neg'], sid.polarity_scores(utterances[i])['neu'],
-                                   sid.polarity_scores(utterances[i])['pos']])))
-
-    return list(zip(thank, exc, neg, sent))
-
+    return list(zip(thank, exc, neg, posi, nega, neut))
 
 def feature_analysis(dialogs):
     features = []
-    #i = 0
-    for diag in dialogs:
-        #print(i, "/", len(dialogs))
-        #i += 1
+    value=["cos_initial_utterance","cos_entire_dialogue","question","same","wh","pos", "nor_pos", "num_w", "sw", "sw_stem", "is_starter","thank", "exc", "neg","positif","negatif","neutre"]
+    for diag in tqdm(dialogs):
         content = [list(i) for i in content_feature(diag)]
         structural = [list(i) for i in structural_feature(diag)]
         sentiment = [list(i) for i in sentiment_feature(diag)]
-        feature = [list(i) for i in list(zip(content, structural, sentiment))]
-        features.append(feature)
+        #feature = [list(i) for c,st,se in list(zip(content, structural, sentiment))]
+        #features.append(np.array(feature,dtype=object))
+        l=np.concatenate((content,structural,sentiment),axis=1).tolist()
+        features.append([dict(zip(value,u)) for u in l])
     return features
 
-
-utterances, intents, _ = load_data("train", 127)
-# %%
-utterances_preprocess = [[preprocessing(text) for text in dialogue] for dialogue in utterances]
-# %%
-features = feature_analysis(utterances_preprocess[:10])
-diag = pd.DataFrame(features[0])
+if __name__ == '__main__':
+    utterances, intents, _ = load_data("train", 127)
+    utterances_preprocess = [[preprocessing(text) for text in dialogue] for dialogue in utterances]
+    features = feature_analysis(utterances_preprocess[:10])
+    diag = pd.DataFrame(features[0])
 
 
 
