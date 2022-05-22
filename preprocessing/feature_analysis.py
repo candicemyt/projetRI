@@ -1,11 +1,13 @@
 import pandas as pd
 import numpy as np
 from load_data import *
-from preprocessing import *
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from tqdm.auto import tqdm
+
+from preprocessing.text_preprocess import stop_words_removal, preprocessing
+
 
 def content_feature(utterances):
     #tf-idf representation
